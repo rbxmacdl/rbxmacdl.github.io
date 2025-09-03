@@ -63,7 +63,7 @@ export function DownloadButton({ version, onError, disabled }: DownloadButtonPro
           </>
         ) : (
           <>
-            <i className="fas fa-download text-lg"></i>
+⬇️
             <span>Download Now</span>
           </>
         )}
