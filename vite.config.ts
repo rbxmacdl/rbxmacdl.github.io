@@ -12,8 +12,8 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
-  // For GitHub Pages: use repository name as base path
-  base: process.env.NODE_ENV === "production" ? "/rbxmacdl/" : "/",
+  // For GitHub Pages: serve from root domain
+  base: "/",
   build: {
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,
