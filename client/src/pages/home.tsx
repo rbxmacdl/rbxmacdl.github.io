@@ -16,8 +16,11 @@ export default function Home() {
     setIsLoading(true);
     setError("");
     try {
-      // Use our backend proxy to avoid CORS issues
-      const response = await fetch('/api/roblox-version');
+      // Use a CORS proxy for GitHub Pages deployment
+      const proxyUrl = 'https://corsproxy.io/?';
+      const targetUrl = 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer';
+      const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
+      
       if (!response.ok) {
         throw new Error(`Error fetching version: ${response.statusText}`);
       }
@@ -25,7 +28,7 @@ export default function Home() {
       setVersion(data.clientVersionUpload);
     } catch (err) {
       console.error('Fetch error:', err);
-      // Fallback to a placeholder version for demonstration
+      // Fallback to a recent known version if CORS proxy fails
       setVersion("version-6ced3f7b78bf439c");
       setError("");
     } finally {
@@ -39,7 +42,9 @@ export default function Home() {
     setIsDownloading(true);
     try {
       // Try to get fresh version first, then download
-      const response = await fetch('/api/roblox-version');
+      const proxyUrl = 'https://corsproxy.io/?';
+      const targetUrl = 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer';
+      const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
       
       let downloadVersion = version;
       if (response.ok) {
