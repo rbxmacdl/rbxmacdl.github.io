@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -11,6 +11,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>("");
   const [isDownloading, setIsDownloading] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const fetchRobloxVersion = async () => {
     setIsLoading(true);
@@ -74,9 +76,94 @@ export default function Home() {
     });
   }, []);
 
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setMousePosition({
+          x: ((e.clientX - rect.left) / rect.width) * 100,
+          y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+      }
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('mousemove', handleMouseMove);
+      return () => container.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-foreground flex flex-col items-center justify-center p-4">
-      <div className="max-w-lg w-full space-y-8">
+    <div 
+      ref={containerRef}
+      className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-foreground flex flex-col items-center justify-center p-4 relative overflow-hidden"
+    >
+      {/* Interactive Background Effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Mouse-following gradient */}
+        <div 
+          className="absolute w-96 h-96 bg-gradient-radial from-blue-500/20 via-purple-500/10 to-transparent rounded-full blur-xl transition-all duration-300 ease-out"
+          style={{
+            left: `${mousePosition.x}%`,
+            top: `${mousePosition.y}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+        
+        {/* Floating particles */}
+        {[...Array(12)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-2 h-2 bg-blue-400/30 rounded-full animate-pulse"
+            style={{
+              left: `${10 + (i * 8) + Math.sin(i) * 10}%`,
+              top: `${20 + (i * 6) + Math.cos(i) * 15}%`,
+              animationDelay: `${i * 0.5}s`,
+              transform: `translate(${(mousePosition.x - 50) * 0.1}px, ${(mousePosition.y - 50) * 0.1}px)`,
+              transition: 'transform 0.6s ease-out',
+            }}
+          />
+        ))}
+        
+        {/* Glowing orbs that react to mouse */}
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={`orb-${i}`}
+            className="absolute rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-sm animate-bounce"
+            style={{
+              width: `${40 + i * 10}px`,
+              height: `${40 + i * 10}px`,
+              left: `${15 + i * 15}%`,
+              top: `${25 + i * 12}%`,
+              animationDelay: `${i * 1.2}s`,
+              animationDuration: `${3 + i * 0.5}s`,
+              transform: `translate(${(mousePosition.x - 50) * (0.05 + i * 0.01)}px, ${(mousePosition.y - 50) * (0.05 + i * 0.01)}px)`,
+              transition: 'transform 0.8s ease-out',
+            }}
+          />
+        ))}
+        
+        {/* Animated grid lines */}
+        <div className="absolute inset-0 opacity-10">
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/20 to-transparent"
+            style={{
+              transform: `translateX(${(mousePosition.x - 50) * 0.2}px) rotate(${(mousePosition.x - 50) * 0.1}deg)`,
+              transition: 'transform 0.5s ease-out',
+            }}
+          />
+          <div 
+            className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-400/20 to-transparent"
+            style={{
+              transform: `translateY(${(mousePosition.y - 50) * 0.2}px) rotate(${(mousePosition.y - 50) * 0.1}deg)`,
+              transition: 'transform 0.5s ease-out',
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="max-w-lg w-full space-y-8 relative z-10">
         {/* Header Section */}
         <div className="text-center space-y-4">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl shadow-lg mb-4">

@@ -163,4 +163,40 @@
   .animate-slide-up {
     animation: slide-up 0.4s ease-out;
   }
+  
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+  }
+  
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px) rotate(0deg); 
+    }
+    50% { 
+      transform: translateY(-20px) rotate(180deg); 
+    }
+  }
+  
+  @keyframes drift {
+    0% { 
+      transform: translate(0px, 0px) rotate(0deg); 
+    }
+    33% { 
+      transform: translate(30px, -30px) rotate(120deg); 
+    }
+    66% { 
+      transform: translate(-20px, 20px) rotate(240deg); 
+    }
+    100% { 
+      transform: translate(0px, 0px) rotate(360deg); 
+    }
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-drift {
+    animation: drift 20s linear infinite;
+  }
 }
