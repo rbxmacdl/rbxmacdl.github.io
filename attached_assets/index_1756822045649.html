@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox Mac DL</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000000;
+            flex-direction: column;
+        }
+        button {
+            font-size: 16px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #versionText {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: white; /* Set text color to black */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="versionText">Loading Roblox version...</div>
+    <button id="runBookmarklet">Download</button>
+
+    <script>
+        // Fetch and display the current Roblox version
+        function fetchRobloxVersion() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    document.getElementById('versionText').innerText = 'Current Roblox macOS Version: ' + data.clientVersionUpload;
+                } else {
+                    document.getElementById('versionText').innerText = 'Error fetching version';
+                }
+            };
+            xhr.onerror = function() {
+                document.getElementById('versionText').innerText = 'Request failed';
+            };
+            xhr.send();
+        }
+
+        // Run the bookmarklet action when the button is clicked
+        document.getElementById('runBookmarklet').onclick = function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    window.open('http://setup.rbxcdn.com/mac/' + data.clientVersionUpload + '-RobloxPlayer.zip', '_blank');
+                } else {
+                    alert('Error fetching version: ' + xhr.statusText);
+                }
+            };
+            xhr.onerror = function() {
+                alert('Request failed');
+            };
+            xhr.send();
+        };
+
+        // Fetch the version on page load
+        fetchRobloxVersion();
+    </script>
+
+</body>
+</html>
