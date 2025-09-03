@@ -5,14 +5,24 @@ interface RobloxVersionResponse {
 }
 
 async function fetchRobloxVersion(): Promise<string> {
-  const response = await fetch('https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer');
+  // Use a CORS proxy for GitHub Pages deployment
+  const proxyUrl = 'https://corsproxy.io/?';
+  const targetUrl = 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer';
   
-  if (!response.ok) {
-    throw new Error(`Failed to fetch version: ${response.statusText}`);
+  try {
+    const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch version: ${response.statusText}`);
+    }
+    
+    const data: RobloxVersionResponse = await response.json();
+    return data.clientVersionUpload;
+  } catch (error) {
+    // Fallback to a recent known version if CORS proxy fails
+    console.warn('Failed to fetch latest version, using fallback:', error);
+    return 'version-6ced3f7b78bf439c';
   }
-  
-  const data: RobloxVersionResponse = await response.json();
-  return data.clientVersionUpload;
 }
 
 export function useRobloxVersion() {
