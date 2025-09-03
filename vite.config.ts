@@ -12,8 +12,8 @@ export default defineConfig({
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
-  // Change "/your-repo-name/" to match your GitHub repository name for GitHub Pages
-  base: process.env.GITHUB_PAGES ? "/rbxmacdl/" : "/",
+  // For GitHub Pages: use repository name as base path
+  base: "./",
   build: {
     outDir: path.resolve(import.meta.dirname, "dist"),
     emptyOutDir: true,

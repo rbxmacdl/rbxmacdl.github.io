@@ -16,15 +16,16 @@ export default function Home() {
     setIsLoading(true);
     setError("");
     try {
-      // Use a CORS proxy for GitHub Pages deployment
-      const proxyUrl = 'https://corsproxy.io/?';
+      // Use a reliable CORS proxy for GitHub Pages deployment
+      const proxyUrl = 'https://api.allorigins.win/get?url=';
       const targetUrl = 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer';
       const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
       
       if (!response.ok) {
         throw new Error(`Error fetching version: ${response.statusText}`);
       }
-      const data: RobloxVersionResponse = await response.json();
+      const proxyData = await response.json();
+      const data: RobloxVersionResponse = JSON.parse(proxyData.contents);
       setVersion(data.clientVersionUpload);
     } catch (err) {
       console.error('Fetch error:', err);
@@ -42,13 +43,14 @@ export default function Home() {
     setIsDownloading(true);
     try {
       // Try to get fresh version first, then download
-      const proxyUrl = 'https://corsproxy.io/?';
+      const proxyUrl = 'https://api.allorigins.win/get?url=';
       const targetUrl = 'https://clientsettingscdn.roblox.com/v2/client-version/MacPlayer';
       const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
       
       let downloadVersion = version;
       if (response.ok) {
-        const data: RobloxVersionResponse = await response.json();
+        const proxyData = await response.json();
+        const data: RobloxVersionResponse = JSON.parse(proxyData.contents);
         downloadVersion = data.clientVersionUpload;
         setVersion(downloadVersion);
       }
