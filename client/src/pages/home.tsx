@@ -75,37 +75,53 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Roblox Mac DL</h1>
-          <p className="text-muted-foreground">Download the official Roblox macOS client</p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-foreground flex flex-col items-center justify-center p-4">
+      <div className="max-w-lg w-full space-y-8">
+        {/* Header Section */}
+        <div className="text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl shadow-lg mb-4">
+            <span className="text-3xl">🎮</span>
+          </div>
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Roblox Mac Download
+          </h1>
+          <p className="text-lg text-slate-300">
+            Download the official Roblox macOS client
+          </p>
+          <div className="flex items-center justify-center space-x-2 text-sm text-blue-300 bg-blue-950/50 rounded-lg px-4 py-2 border border-blue-800/30">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <span>Data sourced directly from Roblox API</span>
+          </div>
         </div>
 
-        <Card>
-          <CardContent className="p-6 space-y-4">
+        {/* Main Card */}
+        <Card className="bg-slate-800/90 border-slate-700/50 shadow-2xl backdrop-blur-sm">
+          <CardContent className="p-8 space-y-6">
             <div className="text-center" data-testid="version-display">
               {isLoading ? (
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="animate-spin w-4 h-4 border-2 border-primary border-t-transparent rounded-full"></div>
-                  <span className="text-muted-foreground">Loading Roblox version...</span>
+                <div className="flex items-center justify-center space-x-3 py-4">
+                  <div className="animate-spin w-6 h-6 border-3 border-blue-400 border-t-transparent rounded-full"></div>
+                  <span className="text-slate-300 text-lg">Loading latest version...</span>
                 </div>
               ) : error ? (
-                <div className="text-destructive space-y-2">
-                  <p>Error loading version</p>
+                <div className="text-red-400 space-y-3 py-4">
+                  <p className="text-lg">Unable to load version</p>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={fetchRobloxVersion}
+                    className="border-red-400/50 text-red-400 hover:bg-red-400/10"
                     data-testid="button-retry"
                   >
                     Try Again
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">Current Roblox macOS Version:</p>
-                  <p className="font-mono text-lg font-semibold">{version}</p>
+                <div className="space-y-3 py-2">
+                  <p className="text-slate-300 font-medium">Current macOS Version:</p>
+                  <div className="bg-slate-900/80 rounded-lg px-4 py-3 border border-slate-600/50">
+                    <p className="font-mono text-xl font-bold text-blue-300">{version}</p>
+                  </div>
                 </div>
               )}
             </div>
@@ -113,31 +129,55 @@ export default function Home() {
             <Button
               onClick={handleDownload}
               disabled={!version || isLoading || isDownloading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 text-lg rounded-xl shadow-lg transform transition-all duration-200 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               data-testid="button-download"
             >
               {isDownloading ? (
-                <div className="flex items-center space-x-2">
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                  <span>Starting Download...</span>
+                <div className="flex items-center space-x-3">
+                  <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
+                  <span>Preparing Download...</span>
                 </div>
               ) : (
-                'Download'
+                <div className="flex items-center space-x-3">
+                  <span className="text-xl">⬇️</span>
+                  <span>Download Now</span>
+                </div>
               )}
             </Button>
 
             {version && !isLoading && (
-              <div className="text-center text-xs text-muted-foreground space-y-1">
-                <p>• Compatible with macOS 10.13+</p>
-                <p>• File size: ~250MB</p>
-                <p>• Direct from Roblox servers</p>
+              <div className="bg-slate-900/60 rounded-lg p-4 border border-slate-600/30">
+                <div className="grid grid-cols-1 gap-2 text-sm text-slate-300">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-green-400">✓</span>
+                    <span>Compatible with macOS 10.13+</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-green-400">✓</span>
+                    <span>File size: ~250MB</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-green-400">✓</span>
+                    <span>Direct from Roblox CDN servers</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="text-blue-400">ℹ</span>
+                    <span>Version fetched from official Roblox API</span>
+                  </div>
+                </div>
               </div>
             )}
           </CardContent>
         </Card>
 
-        <div className="text-center text-xs text-muted-foreground">
-          <p>Unofficial tool - Not affiliated with Roblox Corporation</p>
+        {/* Footer */}
+        <div className="text-center space-y-2">
+          <p className="text-sm text-slate-400">
+            Unofficial tool - Not affiliated with Roblox Corporation
+          </p>
+          <p className="text-xs text-slate-500">
+            Data provided by Roblox Client Settings API
+          </p>
         </div>
       </div>
     </div>
